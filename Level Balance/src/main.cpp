@@ -15,11 +15,9 @@
 #define TOGGLE_ANGLE 3
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-
-
 int16_t AcX, AcY, AcZ, GyX, GyY, GyZ, GyroX, GyroY, GyroZ, Tmp; // 16-bit ints
-int xAng, yAng, zAng;.
-float previousTime, currentTime, elapsedTime;
+int xAng, yAng, zAng;
+.float previousTime, currentTime, elapsedTime;
 float gyroAngX, gyroAngY, gyroAngZ;
 float AcErrorX, AcErrorY, AcErrorZ; // Calibration variables
 float GyErrorX, GyErrorY, GyErrorZ;
@@ -54,6 +52,37 @@ void setup()
 
 void loop()
 {
-  
+
   getAngle();
+}
+
+void getAngle()
+{
+  Wire.beginTransmission(MPU);
+  Wire.write(0x3B); // Accelerometer Measurement Register
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU, 6, true); // 14
+
+  AcX = Wire.read() << 8 | Wire.read(); // 8 bit shift
+  AcY = Wire.read() << 8 | Wire.read();
+  AcZ = Wire.read() << 8 | Wire.read();
+
+  xAng = map(AcX, -ACCELEROMETER_SENSITIVITY, ACCELEROMETER_SENSITIVITY, -90, 90);
+  yAng = map(AcY, -ACCELEROMETER_SENSITIVITY, ACCELEROMETER_SENSITIVITY, -90, 90);
+  zAng = map(AcZ, -ACCELEROMETER_SENSITIVITY, ACCELEROMETER_SENSITIVITY, -90, 90);
+
+  int xAngle = map(AcX, minVal, maxVal, -90, 90);
+  int yAngle = map(AcY, minVal, maxVal, -90, 90);
+  int zAngle = map(AcZ, minVal, maxVal, -90, 90);
+
+  r = RAD_TO_DEG * (atan2(-yAngle, -zAngle) + PI); // Angular Conversion rad to deg
+  p = RAD_TO_DEG * (atan2(-xAngle, -zAngle) + PI);
+  y = RAD_TO_DEG * (atan2(-yAngle, -xAngle) + PI);
+
+  Serial.print("Roll= ");
+  Serial.print(r);
+  Serial.print(" | Pitch= ");
+  Serial.print(p);
+  Serial.print(" | Yaw= ");
+  Serial.println(y);
 }
