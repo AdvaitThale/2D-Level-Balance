@@ -56,6 +56,34 @@ void loop()
   getAngle();
 }
 
+void printBall()
+{
+  getAngle();
+  int roll = map(yAng, -90, 90, 0, 128);
+  int pitch = map(xAng, -90, 90, 0, 64);
+  display.drawCircle(64, 32, 12, SH110X_WHITE);
+  // display.drawLine(0, 32, 128, 32, SH110X_WHITE);
+  // display.drawLine(64, 0, 64, 64, SH110X_WHITE);
+  if (pitch == 32 && roll == 64)
+  {
+    display.setTextSize(1);
+    display.setTextColor(SH110X_WHITE);
+    display.setCursor(62, 29);
+    display.print("+");
+    display.drawCircle(64, 32, 12, SH110X_WHITE);
+  }
+  else
+  {
+    display.fillCircle(roll, pitch, 12, SH110X_WHITE);
+  }
+  // display.drawLine(0, 32, 128, 32, SH110X_WHITE);
+  // display.drawLine(64, 0, 64, 64, SH110X_WHITE); // x, y, x1, y1
+  // display.drawBitmap(roll, pitch, ball_12pix_bmp, BITMAP_BALL_HEIGHT, BITMAP_BALL_WIDTH, SH110X_WHITE);
+  display.display();
+  display.clearDisplay();
+  // display.clearWriteError();
+}
+
 
 void printAngles()
 {
