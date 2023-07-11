@@ -139,3 +139,17 @@ void getIMU()
   // Serial.print("");
   // return x, y, z;
 }
+
+void initialize()
+{
+  Serial.println("Gathering IMU Data...");
+  digitalWrite(BUZZER, HIGH);
+  delay(85);
+  digitalWrite(BUZZER, LOW);
+  tone(BUZZER, 2093);
+  delay(200);
+  noTone(BUZZER);
+  digitalWrite(BUZZER, HIGH);
+  delay(100);
+  digitalWrite(BUZZER, LOW);
+}
