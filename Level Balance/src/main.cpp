@@ -86,3 +86,56 @@ void getAngle()
   Serial.print(" | Yaw= ");
   Serial.println(y);
 }
+
+void getIMU()
+{
+  previousTime = currentTime;                        // Previous time is stored before the actual time read
+  currentTime = millis();                            // Current time
+  elapsedTime = (currentTime - previousTime) / 1000; // Dividing by 1000 to get Elapsed time in seconds
+
+  Wire.beginTransmission(0x68);     // Begin transmission to I2C slave device
+  Wire.write(0x3B);                 // Starting with register 0x3B (ACCEL_XOUT_H) (Default: Degrees per Sec)
+  Wire.endTransmission(false);      // Restarts transmission to I2C slave device
+  Wire.requestFrom(0x68, 14, true); // IMU address, request 14 registers in total, true
+
+  // Read registers of Accelerometer and divide raw values by 16384 for +-2g range
+  AcX = (Wire.read() << 8 | Wire.read()) / ACCELEROMETER_SENSITIVITY; // 0x3B (ACCEL_XOUT_H) 0x3C (ACCEL_XOUT_L)
+  AcY = (Wire.read() << 8 | Wire.read()) / ACCELEROMETER_SENSITIVITY; // 0x3D (ACCEL_YOUT_H) 0x3E (ACCEL_YOUT_L)
+  AcZ = (Wire.read() << 8 | Wire.read()) / ACCELEROMETER_SENSITIVITY; // 0x3F (ACCEL_ZOUT_H) 0x40 (ACCEL_ZOUT_L)
+
+  // Read register of Temperature data
+  Tmp = Wire.read() << 8 | Wire.read(); // 0x41 (TEMP_OUT_H) 0x42 (TEMP_OUT_L)
+
+  // Read registers of Gyroscope and divide raw values by 131 for 250 deg/s range
+  GyroX = (Wire.read() << 8 | Wire.read()) / GYROSCOPE_SENSITIVITY; // 0x43 (GYRO_XOUT_H) 0x44 (GYRO_XOUT_L)
+  GyroY = (Wire.read() << 8 | Wire.read()) / GYROSCOPE_SENSITIVITY; // 0x45 (GYRO_YOUT_H) 0x46 (GYRO_YOUT_L)
+  GyroZ = (Wire.read() << 8 | Wire.read()) / GYROSCOPE_SENSITIVITY; // 0x47 (GYRO_ZOUT_H) 0x48 (GYRO_ZOUT_L)
+
+  gyroAngX = (gyroAngX + GyroX) * elapsedTime; // Converting into degrees (deg=deg/s*s)
+  gyroAngY = (gyroAngY + GyroY) * elapsedTime;
+  gyroAngZ = (gyroAngZ + GyroZ) * elapsedTime;
+
+  //  int xAng = map(AcX, minVal, maxVal, -90, 90);
+  //  int yAng = map(AcY, minVal, maxVal, -90, 90);
+  //  int zAng = map(AcZ, minVal, maxVal, -90, 90);
+
+  //  x = RAD_TO_DEG * (atan2(-yAng, -zAng) + PI); //Angular Conversion rad to deg
+  //  y = RAD_TO_DEG * (atan2(-xAng, -zAng) + PI);
+  //  z = RAD_TO_DEG * (atan2(-yAng, -xAng) + PI);
+
+  // Complementary Filter to add up Gyroscope values and Accelerometer
+  float x = (0.96 * GyroX) + (0.04 * AcX);
+  float y = (0.96 * GyroY) + (0.04 * AcY);
+  float z = (0.96 * GyroZ) + (0.04 * AcZ);
+
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print(" | ");
+  Serial.print("Y: ");
+  Serial.print(y);
+  Serial.print(" | ");
+  Serial.print("Z: ");
+  Serial.println(z);
+  // Serial.print("");
+  // return x, y, z;
+}
