@@ -52,8 +52,16 @@ void setup()
 
 void loop()
 {
-
-  getAngle();
+  if (digitalRead(TOGGLE_ANGLE) == LOW)
+  {
+    printAngles();
+  }
+  else
+  {
+    printBall();
+  }
+  // printAngles();
+  //getAngle();
 }
 
 void printBall()
