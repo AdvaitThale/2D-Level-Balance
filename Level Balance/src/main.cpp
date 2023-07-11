@@ -14,6 +14,25 @@
 #define BUZZER 11           // BUZZER Pin
 #define TOGGLE_ANGLE 3
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#define BITMAP_BALL_HEIGHT 16
+#define BITMAP_BALL_WIDTH 16
+static const unsigned char PROGMEM ball_12pix_bmp[] =
+    {
+        B00001111, B11110000,
+        B00111111, B11111100,
+        B01111111, B11111110,
+        B01111111, B11111110,
+        B01111111, B11111110,
+        B11111110, B11111111,
+        B11111110, B11111111,
+        B11111000, B00111111,
+        B11111110, B11111111,
+        B11111110, B11111111,
+        B01111111, B11111110,
+        B01111111, B11111110,
+        B01111111, B11111110,
+        B00111111, B11111100,
+        B00001111, B11110000};
 
 int16_t AcX, AcY, AcZ, GyX, GyY, GyZ, GyroX, GyroY, GyroZ, Tmp; // 16-bit ints
 int xAng, yAng, zAng;
@@ -61,7 +80,7 @@ void loop()
     printBall();
   }
   // printAngles();
-  //getAngle();
+  // getAngle();
 }
 
 void printBall()
@@ -91,7 +110,6 @@ void printBall()
   display.clearDisplay();
   // display.clearWriteError();
 }
-
 
 void printAngles()
 {
