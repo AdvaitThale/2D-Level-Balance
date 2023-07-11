@@ -56,6 +56,37 @@ void loop()
   getAngle();
 }
 
+
+void printAngles()
+{
+  getAngle();
+  display.drawRect(0, 0, 128, 64, SH110X_WHITE);
+  display.drawLine(0, 17, 128, 17, SH110X_WHITE);
+  display.drawLine(64, 0, 64, 64, SH110X_WHITE);
+  display.setTextSize(1);
+  display.setTextColor(SH110X_WHITE);
+  display.setCursor(7, 5);
+  display.print("Parameter");
+  display.setCursor(70, 5);
+  display.print("Angles");
+  display.setCursor(15, 22);
+  display.print("Roll ");
+  display.setCursor(75, 22);
+  display.print(r);
+  display.setCursor(15, 37);
+  display.print("Pitch ");
+  display.setCursor(75, 37);
+  display.print(p);
+  display.setCursor(15, 52);
+  display.print("Yaw ");
+  display.setCursor(75, 52);
+  display.print(y);
+  display.display();
+  display.clearDisplay();
+  // display.drawLine(0, 0, 128, 64, SH110X_WHITE);
+  // display.clearWriteError();
+}
+
 void getAngle()
 {
   Wire.beginTransmission(MPU);
