@@ -5,13 +5,13 @@
 
 #define ACCELEROMETER_SENSITIVITY 16384.0 // +-2g = 16384 LSB/g
 #define GYROSCOPE_SENSITIVITY 131.0       // 250 degrees/s = 131 LSB/degrees/s
-// #define M_PI 3.14159265359                // Redefine PI
-#define dt 0.01             // 10 ms Sample rate
-#define SCREEN_WIDTH 128    // OLED display width, in pixels
-#define SCREEN_HEIGHT 64    // OLED display height, in pixels
-#define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3c // 0x3D for 128x64, 0x3C for 128x32
-#define BUZZER 11           // BUZZER Pin
+#define M_PI 3.14159265359                // Redefine PI
+#define dt 0.01                           // 10 ms Sample rate
+#define SCREEN_WIDTH 128                  // OLED display width, in pixels
+#define SCREEN_HEIGHT 64                  // OLED display height, in pixels
+#define OLED_RESET -1                     // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3c               // 0x3D for 128x64, 0x3C for 128x32
+#define BUZZER 11                         // BUZZER Pin
 #define TOGGLE_ANGLE 3
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define BITMAP_BALL_HEIGHT 16
@@ -36,7 +36,7 @@ static const unsigned char PROGMEM ball_12pix_bmp[] =
 
 int16_t AcX, AcY, AcZ, GyX, GyY, GyZ, GyroX, GyroY, GyroZ, Tmp; // 16-bit ints
 int xAng, yAng, zAng;
-.float previousTime, currentTime, elapsedTime;
+float previousTime, currentTime, elapsedTime;
 float gyroAngX, gyroAngY, gyroAngZ;
 float AcErrorX, AcErrorY, AcErrorZ; // Calibration variables
 float GyErrorX, GyErrorY, GyErrorZ;
@@ -62,16 +62,16 @@ void setup()
   Wire.write(0);                       // Wake up IMU
   Wire.endTransmission(true);          // End transmission to I2C slave
   display.begin(SCREEN_ADDRESS, true); // Address 0x3C default
-  // display.setContrast(5);              // Display Contrast
-  display.cp437(true);
-  display.display();
-  display.clearDisplay(); // Clear the buffer.
+  display.setContrast(5);              // Display Contrast
+  display.cp437(true);                 // Using IBM standard charset CP437
+  display.display();                   // Display = True
+  display.clearDisplay();              // Clear the buffer.
   // initialize();
 }
 
 void loop()
 {
-  if (digitalRead(TOGGLE_ANGLE) == LOW)
+  if (digitalRead(TOGGLE_ANGLE) == LOW) // Angles displayed after keypressed
   {
     printAngles();
   }
