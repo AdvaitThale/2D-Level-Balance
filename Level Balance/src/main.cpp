@@ -38,13 +38,13 @@ int16_t AcX, AcY, AcZ, GyX, GyY, GyZ, GyroX, GyroY, GyroZ, Tmp; // 16-bit ints
 int xAng, yAng, zAng;
 float previousTime, currentTime, elapsedTime;
 float gyroAngX, gyroAngY, gyroAngZ;
-float AcErrorX, AcErrorY, AcErrorZ; // Calibration variables
+float AcErrorX, AcErrorY, AcErrorZ; // Calibration variables  // AcErrorX = -1, AcErrorY = 0. , AcErrorZ = -1/360
 float GyErrorX, GyErrorY, GyErrorZ;
 const int MPU = 0x68;
 int minVal = 265;
 int maxVal = 402;
 float r, y, p;
-
+ 
 // int getIMU(float x, float y, float z);
 void getIMU();
 void getAngle();
