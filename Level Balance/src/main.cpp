@@ -44,7 +44,7 @@ const int MPU = 0x68;
 int minVal = 265;
 int maxVal = 402;
 float r, y, p;
- 
+
 // int getIMU(float x, float y, float z);
 void getIMU();
 void getAngle();
@@ -95,13 +95,13 @@ void printBall()
   {
     display.setTextSize(1);
     display.setTextColor(SH110X_WHITE);
-    display.setCursor(62, 29);
-    display.print("+");
-    display.drawCircle(64, 32, 12, SH110X_WHITE);
+    display.setCursor(62, 29);                    // Adjusted Centre
+    display.print("+");                           // Absolute Centre
+    display.drawCircle(64, 32, 12, SH110X_WHITE); // Centre Reference Circle
   }
   else
   {
-    display.fillCircle(roll, pitch, 12, SH110X_WHITE);
+    display.fillCircle(roll, pitch, 12, SH110X_WHITE); // ((270) -90 <= Roll >= 90, 90 <= Pitch >= -90 (270))
   }
   // display.drawLine(0, 32, 128, 32, SH110X_WHITE);
   // display.drawLine(64, 0, 64, 64, SH110X_WHITE); // x, y, x1, y1
@@ -114,9 +114,9 @@ void printBall()
 void printAngles()
 {
   getAngle();
-  display.drawRect(0, 0, 128, 64, SH110X_WHITE);
+  display.drawRect(0, 0, 128, 64, SH110X_WHITE); // Table View Start
   display.drawLine(0, 17, 128, 17, SH110X_WHITE);
-  display.drawLine(64, 0, 64, 64, SH110X_WHITE);
+  display.drawLine(64, 0, 64, 64, SH110X_WHITE); // Table View End
   display.setTextSize(1);
   display.setTextColor(SH110X_WHITE);
   display.setCursor(7, 5);
