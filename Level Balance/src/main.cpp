@@ -12,7 +12,8 @@
 #define OLED_RESET -1                     // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3c               // 0x3D for 128x64, 0x3C for 128x32
 #define BUZZER 11                         // BUZZER Pin
-#define TOGGLE_ANGLE 3
+#define TOGGLE_ANGLE 3                    // Toggle to display angular values
+#define CENTRE_LED 12                     // LED Pin
 Adafruit_SH1106G display = Adafruit_SH1106G(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define BITMAP_BALL_HEIGHT 16
 #define BITMAP_BALL_WIDTH 16
@@ -56,6 +57,7 @@ void setup()
   Serial.begin(115200);
   pinMode(BUZZER, OUTPUT);             // Set to OUTPUT for Buzzer Pin
   pinMode(TOGGLE_ANGLE, INPUT_PULLUP); // Toggle to display angular values
+  pinMode(CENTRE_LED, OUTPUT);         // Set to OUTPUT for LED Pin
   Wire.begin();                        // Initiate wire lib. and I2C
   Wire.beginTransmission(0x68);        // Start transmission to I2C slave
   Wire.write(0x6B);                    // Power Management Register (PWR_MGMT_1)
@@ -66,6 +68,8 @@ void setup()
   display.cp437(true);                 // Using IBM standard charset CP437
   display.display();                   // Display = True
   display.clearDisplay();              // Clear the buffer.
+  // display.setCursor(64, 32);
+  // display.print("AUGHH");
   // initialize();
 }
 
@@ -98,10 +102,14 @@ void printBall()
     display.setCursor(62, 29);                    // Adjusted Centre
     display.print("+");                           // Absolute Centre
     display.drawCircle(64, 32, 12, SH110X_WHITE); // Centre Reference Circle
+    digitalWrite(CENTRE_LED, HIGH);               // LED ON
+    digitalWrite(LED_BUILTIN, HIGH);               // LED ON
   }
   else
   {
     display.fillCircle(roll, pitch, 12, SH110X_WHITE); // ((270) -90 <= Roll >= 90, 90 <= Pitch >= -90 (270))
+    digitalWrite(CENTRE_LED, LOW);                     // LED OFF
+    digitalWrite(LED_BUILTIN, LOW);                     // LED OFF
   }
   // display.drawLine(0, 32, 128, 32, SH110X_WHITE);
   // display.drawLine(64, 0, 64, 64, SH110X_WHITE); // x, y, x1, y1
