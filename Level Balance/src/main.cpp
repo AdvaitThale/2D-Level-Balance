@@ -103,13 +103,13 @@ void printBall()
     display.print("+");                           // Absolute Centre
     display.drawCircle(64, 32, 12, SH110X_WHITE); // Centre Reference Circle
     digitalWrite(CENTRE_LED, HIGH);               // LED ON
-    digitalWrite(LED_BUILTIN, HIGH);               // LED ON
+    digitalWrite(LED_BUILTIN, HIGH);              // LED ON
   }
   else
   {
     display.fillCircle(roll, pitch, 12, SH110X_WHITE); // ((270) -90 <= Roll >= 90, 90 <= Pitch >= -90 (270))
     digitalWrite(CENTRE_LED, LOW);                     // LED OFF
-    digitalWrite(LED_BUILTIN, LOW);                     // LED OFF
+    digitalWrite(LED_BUILTIN, LOW);                    // LED OFF
   }
   // display.drawLine(0, 32, 128, 32, SH110X_WHITE);
   // display.drawLine(64, 0, 64, 64, SH110X_WHITE); // x, y, x1, y1
